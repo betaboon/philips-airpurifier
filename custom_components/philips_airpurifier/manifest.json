@@ -1,7 +1,7 @@
 {
   "domain": "philips_airpurifier",
   "name": "Philips AirPurifier (with CoAP)",
-  "version": "2021-03-07",
+  "version": "v2021-03-07",
   "documentation": "https://github.com/betaboon/philips-airpurifier",
   "dependencies": [],
   "codeowners": ["@betaboon"],
