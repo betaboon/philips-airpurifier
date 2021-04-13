@@ -80,6 +80,7 @@ from .const import (
     MODEL_AC1214,
     MODEL_AC2729,
     MODEL_AC2889,
+    MODEL_AC2939,
     MODEL_AC3059,
     MODEL_AC3829,
     MODEL_AC3858,
@@ -134,6 +135,7 @@ from .const import (
     PRESET_MODE_ALLERGEN,
     PRESET_MODE_AUTO,
     PRESET_MODE_BACTERIA,
+    PRESET_MODE_GENTLE,
     PRESET_MODE_NIGHT,
     PRESET_MODE_SLEEP,
     PRESET_MODE_TURBO,
@@ -149,6 +151,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
                 MODEL_AC1214,
                 MODEL_AC2729,
                 MODEL_AC2889,
+                MODEL_AC2939,
                 MODEL_AC3059,
                 MODEL_AC3829,
                 MODEL_AC3858,
@@ -176,6 +179,7 @@ async def async_setup_platform(
         MODEL_AC1214: PhilipsAC1214,
         MODEL_AC2729: PhilipsAC2729,
         MODEL_AC2889: PhilipsAC2889,
+        MODEL_AC2939: PhilipsAC2939,
         MODEL_AC3059: PhilipsAC3059,
         MODEL_AC3829: PhilipsAC3829,
         MODEL_AC3858: PhilipsAC3858,
@@ -613,6 +617,14 @@ class PhilipsAC2889(PhilipsGenericCoAPFan):
         PRESET_MODE_BACTERIA: {PHILIPS_POWER: "1", PHILIPS_MODE: "B"},
         PRESET_MODE_SLEEP: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "s"},
         PRESET_MODE_TURBO: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "t"},
+    }
+
+class PhilipsAC2939(PhilipsTVOCMixin, PhilipsGenericCoAPFan):
+    AVAILABLE_PRESET_MODES = {
+        PRESET_MODE_AUTO: {PHILIPS_POWER: "1", PHILIPS_MODE: "AG"},
+        PRESET_MODE_GENTLE: {PHILIPS_POWER: "1", PHILIPS_MODE: "GT"},
+        PRESET_MODE_SLEEP: {PHILIPS_POWER: "1", PHILIPS_MODE: "S"},
+        PRESET_MODE_TURBO: {PHILIPS_POWER: "1", PHILIPS_MODE: "T"},
     }
 
 
