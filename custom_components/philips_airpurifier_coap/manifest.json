@@ -1,5 +1,5 @@
 {
-  "domain": "philips_airpurifier",
+  "domain": "philips_airpurifier_coap",
   "name": "Philips AirPurifier (with CoAP)",
   "version": "0.4.0",
   "documentation": "https://github.com/betaboon/philips-airpurifier",

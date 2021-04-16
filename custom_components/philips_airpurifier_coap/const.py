@@ -1,4 +1,4 @@
-DOMAIN = "philips_airpurifier"
+DOMAIN = "philips_airpurifier_coap"
 DATA_KEY = "fan.philips_airpurifier"
 
 DEFAULT_NAME = "Philips AirPurifier"
