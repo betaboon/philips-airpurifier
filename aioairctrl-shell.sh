@@ -1,6 +1,6 @@
 python="python3"
 pip="pip3"
-manifest=./custom_components/philips_airpurifier/manifest.json
+manifest=./custom_components/philips_airpurifier_coap/manifest.json
 aioairctrl=$(sed -rn 's/^\s*"aioairctrl @ ([^"]*)"/\1/p' $manifest)
 
 if ! command -v $python &> /dev/null
