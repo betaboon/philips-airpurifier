@@ -116,7 +116,7 @@ The integration provides `fan` entities for your devices which are [documented h
 
 ### Services:
 
-`philips_airpurifier_coap` registers the following services in addition to the standard `fan`services:
+`philips_airpurifier_coap` registers the following services in addition to the standard `fan` services:
 
 #### Turn the child lock on
 
