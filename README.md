@@ -65,6 +65,7 @@ name | Philips Air Purifier | Optional | Name of the Fan.
 - AC2729
 - AC2889
 - AC2939
+- AC3039
 - AC3059
 - AC3829
 - AC3858
