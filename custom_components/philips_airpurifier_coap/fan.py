@@ -87,6 +87,7 @@ from .const import (
     MODEL_AC3829,
     MODEL_AC3858,
     MODEL_AC4236,
+    MODEL_AC5659,
     PHILIPS_AIR_QUALITY_INDEX,
     PHILIPS_CHILD_LOCK,
     PHILIPS_DEVICE_ID,
@@ -160,6 +161,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
                 MODEL_AC3829,
                 MODEL_AC3858,
                 MODEL_AC4236,
+                MODEL_AC5659
             ]
         ),
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
@@ -190,6 +192,7 @@ async def async_setup_platform(
         MODEL_AC3829: PhilipsAC3829,
         MODEL_AC3858: PhilipsAC3858,
         MODEL_AC4236: PhilipsAC4236,
+        MODEL_AC5659: PhilipsAC5659,
     }
 
     model_class = model_to_class.get(model)
@@ -689,4 +692,16 @@ class PhilipsAC4236(PhilipsTVOCMixin, PhilipsGenericCoAPFan):
         PRESET_MODE_AUTO: {PHILIPS_POWER: "1", PHILIPS_MODE: "AG"},
         PRESET_MODE_SLEEP: {PHILIPS_POWER: "1", PHILIPS_MODE: "S", PHILIPS_SPEED: "s"},
         PRESET_MODE_TURBO: {PHILIPS_POWER: "1", PHILIPS_MODE: "T", PHILIPS_SPEED: "t"},
+    }
+
+class PhilipsAC5659(PhilipsTVOCMixin, PhilipsGenericCoAPFan):
+    AVAILABLE_PRESET_MODES = {
+        PRESET_MODE_ALLERGEN: {PHILIPS_POWER: "1", PHILIPS_MODE: "A"},
+        PRESET_MODE_BACTERIA: {PHILIPS_POWER: "1", PHILIPS_MODE: "B"},
+        PRESET_MODE_AUTO: {PHILIPS_POWER: "1", PHILIPS_MODE: "P"},
+        PRESET_MODE_SLEEP: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "s"},
+        PRESET_MODE_SPEED_1: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "1"},
+        PRESET_MODE_SPEED_2: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "2"},
+        PRESET_MODE_SPEED_3: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "3"},
+        PRESET_MODE_TURBO: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "t"},
     }
