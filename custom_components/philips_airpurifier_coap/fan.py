@@ -628,7 +628,7 @@ class PhilipsAC2889(PhilipsGenericCoAPFan):
         PRESET_MODE_TURBO: {PHILIPS_POWER: "1", PHILIPS_MODE: "M", PHILIPS_SPEED: "t"},
     }
 
-class PhilipsAC2939(PhilipsTVOCMixin, PhilipsGenericCoAPFan):
+class PhilipsAC2939(PhilipsGenericCoAPFan):
     AVAILABLE_PRESET_MODES = {
         PRESET_MODE_AUTO: {PHILIPS_POWER: "1", PHILIPS_MODE: "AG"},
         PRESET_MODE_GENTLE: {PHILIPS_POWER: "1", PHILIPS_MODE: "GT"},
