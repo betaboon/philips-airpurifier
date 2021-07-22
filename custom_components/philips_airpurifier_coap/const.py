@@ -1,5 +1,24 @@
+"""Constants for Philips AirPurifier integration."""
+from __future__ import annotations
+
+from datetime import timedelta
+from homeassistant.components.sensor import ATTR_STATE_CLASS, STATE_CLASS_MEASUREMENT
+from homeassistant.const import (
+    ATTR_DEVICE_CLASS,
+    ATTR_ICON,
+    ATTR_TEMPERATURE,
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+    DEVICE_CLASS_HUMIDITY,
+    DEVICE_CLASS_TEMPERATURE,
+)
+
+from .model import SensorDescription
+
 DOMAIN = "philips_airpurifier_coap"
-DATA_KEY = "fan.philips_airpurifier"
+
+DATA_KEY_CLIENT = "client"
+DATA_KEY_COORDINATOR = "coordinator"
+DATA_KEY_FAN = "fan"
 
 DEFAULT_NAME = "Philips AirPurifier"
 DEFAULT_ICON = "mdi:air-purifier"
@@ -60,6 +79,9 @@ ATTR_FUNCTION = "function"
 ATTR_HUMIDITY = "humidity"
 ATTR_HUMIDITY_TARGET = "humidity_target"
 ATTR_INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
+ATTR_LABEL = "label"
+ATTR_UNIT = "unit"
+ATTR_VALUE = "value"
 ATTR_LANGUAGE = "language"
 ATTR_LIGHT_BRIGHTNESS = "light_brightness"
 ATTR_MODE = "mode"
@@ -128,4 +150,59 @@ PHILIPS_ERROR_CODE_MAP = {
     49153: "pre-filter must be cleaned",
     49155: "pre-filter must be cleaned",
     49408: "no water",
+}
+
+SENSOR_TYPES: dict[str, SensorDescription] = {
+    # filter information
+    PHILIPS_FILTER_PRE_REMAINING: {
+        ATTR_LABEL: ATTR_FILTER_PRE_REMAINING,
+        ATTR_VALUE: lambda value, _: str(timedelta(hours=value)),
+    },
+    PHILIPS_FILTER_HEPA_REMAINING: {
+        ATTR_LABEL: ATTR_FILTER_HEPA_REMAINING,
+        ATTR_VALUE: lambda value, _: str(timedelta(hours=value)),
+    },
+    PHILIPS_FILTER_ACTIVE_CARBON_REMAINING: {
+        ATTR_LABEL: ATTR_FILTER_ACTIVE_CARBON_REMAINING,
+        ATTR_VALUE: lambda value, _: str(timedelta(hours=value)),
+    },
+    PHILIPS_FILTER_WICK_REMAINING: {
+        ATTR_LABEL: ATTR_FILTER_WICK_REMAINING,
+        ATTR_VALUE: lambda value, _: str(timedelta(hours=value)),
+    },
+    PHILIPS_WATER_LEVEL: {
+        ATTR_ICON: "mdi:water",
+        ATTR_LABEL: ATTR_WATER_LEVEL,
+        ATTR_VALUE: lambda value, status: 0 if status.get("err") in [32768, 49408] else value,
+    },
+    # device sensors
+    PHILIPS_AIR_QUALITY_INDEX: {
+        ATTR_LABEL: ATTR_AIR_QUALITY_INDEX,
+    },
+    PHILIPS_INDOOR_ALLERGEN_INDEX: {
+        ATTR_ICON: "mdi:blur",
+        ATTR_LABEL: ATTR_INDOOR_ALLERGEN_INDEX,
+        ATTR_STATE_CLASS: STATE_CLASS_MEASUREMENT,
+    },
+    PHILIPS_PM25: {
+        ATTR_ICON: "mdi:blur",
+        ATTR_LABEL: "PM2.5",
+        ATTR_UNIT: CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        ATTR_STATE_CLASS: STATE_CLASS_MEASUREMENT,
+    },
+    PHILIPS_TOTAL_VOLATILE_ORGANIC_COMPOUNDS: {
+        ATTR_ICON: "mdi:blur",
+        ATTR_LABEL: ATTR_TOTAL_VOLATILE_ORGANIC_COMPOUNDS,
+        ATTR_STATE_CLASS: STATE_CLASS_MEASUREMENT,
+    },
+    PHILIPS_HUMIDITY: {
+        ATTR_DEVICE_CLASS: DEVICE_CLASS_HUMIDITY,
+        ATTR_LABEL: ATTR_HUMIDITY,
+        ATTR_STATE_CLASS: STATE_CLASS_MEASUREMENT,
+    },
+    PHILIPS_TEMPERATURE: {
+        ATTR_DEVICE_CLASS: DEVICE_CLASS_TEMPERATURE,
+        ATTR_LABEL: ATTR_TEMPERATURE,
+        ATTR_STATE_CLASS: STATE_CLASS_MEASUREMENT,
+    },
 }

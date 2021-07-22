@@ -19,8 +19,7 @@ Add `https://github.com/betaboon/philips-airpurifier.git` as custom-repository i
 Add the following to your `configuration.yaml`:
 
 ```yaml
-fan:
-  platform: philips_airpurifier_coap
+philips_airpurifier_coap:
   host: 192.168.0.17
   model: ac4236
 ```
@@ -32,17 +31,14 @@ fan:
 Add the following to your `configuration.yaml`:
 
 ```yaml
-fan:
-  - platform: philips_airpurifier_coap
-    host: 192.168.0.100
+philips_airpurifier_coap:
+  - host: 192.168.0.100
     model: ac1214
 
-  - platform: philips_airpurifier_coap
-    host: 192.168.0.101
+  - host: 192.168.0.101
     model: ac1214
 
-  - platform: philips_airpurifier_coap
-    host: 192.168.0.102
+  - host: 192.168.0.102
     model: ac1214
 ```
 
@@ -52,7 +48,6 @@ fan:
 ## Configuration variables:
 Field | Value | Necessity | Description
 --- | --- | --- | ---
-platform | `philips_airpurifier_coap` | *Required* | The platform name.
 host | 192.168.0.17 | *Required* | IP address of the Purifier.
 model | ac4236 | *Required* | Model of the Purifier.
 name | Philips Air Purifier | Optional | Name of the Fan.
