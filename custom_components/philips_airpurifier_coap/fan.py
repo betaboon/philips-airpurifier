@@ -274,6 +274,52 @@ class PhilipsGenericFan(FanEntity):
         return self._available
 
 
+class Timer:
+    _in_callback: bool = False
+    _auto_restart:bool = False
+
+    def __init__(self, timeout, callback, autostart=True):
+        self._timeout = timeout
+        self._callback = callback
+        self._task = None
+
+        if autostart:
+            self.start()
+
+    async def _job(self):
+        while True:
+            try:
+                self._in_callback = False
+                _LOGGER.debug(f"Starte Timer {self._timeout}s.")
+                await asyncio.sleep(self._timeout)
+                self._in_callback = True
+                _LOGGER.debug("Calling timeout callback...")
+                await self._callback()
+                _LOGGER.debug("Timeout callback finished!")
+            except asyncio.exceptions.CancelledError:
+                _LOGGER.debug("Timer cancelled")
+            except:
+                _LOGGER.exception("Timer callback failure")
+            self._in_callback = False
+            if not self._auto_restart:
+                break
+
+    def setTimeout(self, timeout):
+        self._timeout = timeout
+
+    def _cancel(self):
+        if self._in_callback:
+            raise Exception("Timedout too late to cancel, to find cancel!")
+        if self._task is not None:
+            self._task.cancel()
+    
+    def reset(self):
+        self._cancel()
+        self.start()
+
+    def start(self):
+        self._task = asyncio.ensure_future(self._job())
+
 class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     AVAILABLE_PRESET_MODES = {}
     AVAILABLE_ATTRIBUTES = []
@@ -281,6 +327,10 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     def __init__(self, host: str, model: str, name: str, icon: str) -> None:
         super().__init__(host, model, name, icon)
         self._device_status = None
+        self._timer: Timer = Timer(67, self.reset_connection, False) # Maybe use response.opts.max_age field here, instead of hardcoding?
+        self._connecting_timeout = Timer(20, self.stopConnectingAttempt, False)
+
+        self._connect_task = None
 
         self._preset_modes = []
         self._available_preset_modes = {}
@@ -289,7 +339,23 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         self._available_attributes = []
         self._collect_available_attributes()
 
-    async def init(self) -> None:
+    async def stopConnectingAttempt(self):
+        _LOGGER.debug("Try to cancel connect...")
+        if self._connect_task is not None:
+            _LOGGER.debug("Try to cancel connect......")
+            self._connect_task.cancel()
+
+    async def reset_connection(self):
+        await self.init()
+        try:
+            self._observer_task.cancel()
+            await self._observer_task
+            await self._client.shutdown()
+        except:
+            _LOGGER.exception("Reset Connection: Cleanup of old connection failed!")
+        await self.async_added_to_hass()
+
+    async def init_connection(self):
         self._client = await CoAPClient.create(self._host)
         self._observer_task = None
         try:
@@ -300,6 +366,24 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         except Exception as e:
             _LOGGER.error("Failed retrieving unique_id: %s", e)
             raise PlatformNotReady
+
+    async def init(self) -> None:
+        while True:
+            try:
+                _LOGGER.debug("Connecting to AirPurifier...")
+                self._connecting_timeout.reset()
+                self._connect_task = asyncio.ensure_future(self.init_connection())
+                await self._connect_task
+                self._connect_task.result()
+                self._connect_task = None
+                self._connecting_timeout._cancel()
+                _LOGGER.debug("Starte Oberservation Timeout...")
+                self._timer.start()
+                return
+            except:
+                _LOGGER.exception("init_connection(): Exception!")
+                await asyncio.sleep(30)
+        
 
     def _collect_available_preset_modes(self):
         preset_modes = {}
@@ -328,6 +412,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         async for status in self._client.observe_status():
             self._device_status = status
             self.schedule_update_ha_state()
+            self._timer.reset()
 
     @property
     def should_poll(self) -> bool:
