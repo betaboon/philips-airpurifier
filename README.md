@@ -9,7 +9,7 @@ Change of platform name from philips_airpurifier to philips_airpurifier_coap to 
 
 ## Install:
 
-Add `https://github.com/betaboon/philips-airpurifier.git` as custom-repository in [HACS](https://hacs.xyz/docs/faq/custom_repositories/)
+Add `https://github.com/betaboon/philips-airpurifier` as custom-repository in [HACS](https://hacs.xyz/docs/faq/custom_repositories/)
 
 
 ## Setup:
