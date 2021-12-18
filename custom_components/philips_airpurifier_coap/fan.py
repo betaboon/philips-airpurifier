@@ -380,7 +380,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             await self._client.set_control_values(data=status_pattern)
 
     @property
-    def device_state_attributes(self) -> Optional[Dict[str, Any]]:
+    def extra_state_attributes(self) -> Optional[Dict[str, Any]]:
         def append(
             attributes: dict,
             key: str,
