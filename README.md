@@ -9,7 +9,7 @@ Change of platform name from philips_airpurifier to philips_airpurifier_coap to 
 
 ## Install:
 
-Add `https://github.com/betaboon/philips-airpurifier.git` as custom-repository in [HACS](https://hacs.xyz/docs/faq/custom_repositories/)
+Add `https://github.com/kongo09/philips-airpurifier-coap` as custom-repository in [HACS](https://hacs.xyz/docs/faq/custom_repositories/)
 
 
 ## Setup:
@@ -65,6 +65,8 @@ name | Philips Air Purifier | Optional | Name of the Fan.
 - AC2729
 - AC2889
 - AC2939
+- AC2958
+- AC3033
 - AC3059
 - AC3829
 - AC3858
@@ -81,7 +83,7 @@ To aquire those information please follow these steps:
 ### Prepare the environment
 
 ```sh
-git clone https://github.com/betaboon/philips-airpurifier.git
+git clone https://github.com/kongo09/philips-airpurifier-coap.git
 cd philips-airpurifier
 source aioairctrl-shell.sh
 ```
@@ -116,7 +118,7 @@ The integration provides `fan` entities for your devices which are [documented h
 
 ### Services:
 
-`philips_airpurifier_coap` registers the following services in addition to the standard `fan`services:
+`philips_airpurifier_coap` registers the following services in addition to the standard `fan` services:
 
 #### Turn the child lock on
 
